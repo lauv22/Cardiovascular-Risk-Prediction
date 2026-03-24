@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVD Risk Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        .header {
+            background: #c0392b;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            font-size: 16px;
+            color: #c0392b;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f4f6f9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        select, input {
+            padding: 9px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #fafafa;
+            transition: border 0.2s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #c0392b;
+            background: white;
+        }
+
+        .bmi-box {
+            background: #fff5f5;
+            border: 1px solid #f5c6c6;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 14px;
+            color: #c0392b;
+            font-weight: 600;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #c0392b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #a93226;
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>❤️ Cardiovascular Risk Predictor</h1>
+        <p>Final Year BCA Project — Educational Use Only</p>
+    </div>
+
+    <div class="container">
+        <form action="/predict" method="POST">
+
+            <!-- Personal Information -->
+            <div class="card">
+                <h2>👤 Personal Information</h2>
+                <div class="grid">
+
+                    <div class="form-group">
+                        <label>Age Category</label>
+                        <select name="age_category" required>
+                            <option value="">-- Select --</option>
+                            <option>18-24</option><option>25-29</option>
+                            <option>30-34</option><option>35-39</option>
+                            <option>40-44</option><option>45-49</option>
+                            <option>50-54</option><option>55-59</option>
+                            <option>60-64</option><option>65-69</option>
+                            <option>70-74</option><option>75-79</option>
+                            <option>80+</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sex</label>
+                        <select name="sex" required>
+                            <option value="">-- Select --</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>General Health</label>
+                        <select name="general_health" required>
+                            <option value="">-- Select --</option>
+                            <option>Excellent</option>
+                            <option>Very Good</option>
+                            <option>Good</option>
+                            <option>Fair</option>
+                            <option>Poor</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last Medical Checkup</label>
+                        <select name="checkup" required>
+                            <option value="">-- Select --</option>
+                            <option>Within the past year</option>
+                            <option>Within the past 2 years</option>
+                            <option>5 or more years ago</option>
+                            <option>Never</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Health Conditions -->
+            <div class="card">
+                <h2>🏥 Health Conditions</h2>
+                <div class="grid">
+
+                    <div class="form-group">
+                        <label>Diabetes</label>
+                        <select name="diabetes" required>
+                            <option value="">-- Select --</option>
+                            <option>No</option>
+                            <option>Yes</option>
+                            <option>No, pre-diabetes or borderline diabetes</option>
+                            <option>Yes, but female told only during pregnancy</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Depression</label>
+                        <select name="depression" required>
+                            <option value="">-- Select --</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Arthritis</label>
+                        <select name="arthritis" required>
+                            <option value="">-- Select --</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Skin Cancer</label>
+                        <select name="skin_cancer" required>
+                            <option value="">-- Select --</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Other Cancer</label>
+                        <select name="other_cancer" required>
+                            <option value="">-- Select --</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Smoking History</label>
+                        <select name="smoking" required>
+                            <option value="">-- Select --</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Exercise (past 30 days)</label>
+                        <select name="exercise" required>
+                            <option value="">-- Select --</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Body Measurements -->
+            <div class="card">
+                <h2>📏 Body Measurements</h2>
+                <div class="grid">
+
+                    <div class="form-group">
+                        <label>Height (cm)</label>
+                        <input type="number" name="height" id="height"
+                               min="100" max="250" step="0.5"
+                               placeholder="e.g. 170" required
+                               oninput="calcBMI()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" name="weight" id="weight"
+                               min="30" max="200" step="0.5"
+                               placeholder="e.g. 70" required
+                               oninput="calcBMI()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>BMI (Auto-calculated)</label>
+                        <div class="bmi-box" id="bmi-display">
+                            Enter height & weight
+                        </div>
+                        <input type="hidden" name="bmi" id="bmi-value">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Diet & Lifestyle -->
+            <div class="card">
+                <h2>🥗 Diet & Lifestyle</h2>
+                <div class="grid">
+
+                    <div class="form-group">
+                        <label>Alcohol (drinks/month)</label>
+                        <input type="number" name="alcohol"
+                               min="0" max="30" step="0.5"
+                               placeholder="e.g. 2" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fruit (servings/month)</label>
+                        <input type="number" name="fruit"
+                               min="0" max="120" step="1"
+                               placeholder="e.g. 15" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Green Vegetables (servings/month)</label>
+                        <input type="number" name="vegetables"
+                               min="0" max="120" step="1"
+                               placeholder="e.g. 15" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fried Potato (servings/month)</label>
+                        <input type="number" name="fried_potato"
+                               min="0" max="128" step="1"
+                               placeholder="e.g. 5" required>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn">
+                🔍 Predict Cardiovascular Risk
+            </button>
+
+            <p class="disclaimer">
+                ⚠️ This tool is for educational purposes only.
+                Not a substitute for professional medical advice.
+            </p>
+
+        </form>
+    </div>
+
+    <!-- BMI Calculator Script -->
+    <script>
+        function calcBMI() {
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+
+            if (height > 0 && weight > 0) {
+                const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+                document.getElementById('bmi-display').innerText = 'BMI = ' + bmi;
+                document.getElementById('bmi-value').value = bmi;
+            } else {
+                document.getElementById('bmi-display').innerText = 'Enter height & weight';
+                document.getElementById('bmi-value').value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
