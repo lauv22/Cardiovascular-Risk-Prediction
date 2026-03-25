@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVD Risk Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        .header {
+            background: #c0392b;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .high-risk {
+            border-top: 5px solid #e74c3c;
+        }
+
+        .low-risk {
+            border-top: 5px solid #27ae60;
+        }
+
+        .risk-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .risk-label {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .high-risk .risk-label {
+            color: #e74c3c;
+        }
+
+        .low-risk .risk-label {
+            color: #27ae60;
+        }
+
+        .probability {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #f0f0f0;
+            border-radius: 50px;
+            height: 18px;
+            margin: 10px 0 5px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 50px;
+            transition: width 1s ease;
+        }
+
+        .progress-bar.high {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+
+        .progress-bar.low {
+            background: linear-gradient(to right, #27ae60, #1e8449);
+        }
+
+        .progress-label {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        /* Summary Table */
+        .summary-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .summary-card h2 {
+            font-size: 15px;
+            color: #c0392b;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f4f6f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #f4f6f9;
+        }
+
+        td:first-child {
+            font-weight: 600;
+            color: #555;
+            width: 55%;
+        }
+
+        td:last-child {
+            color: #333;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: #fff8e1;
+            border-left: 4px solid #f39c12;
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 13px;
+            color: #7d6608;
+            margin-bottom: 20px;
+        }
+
+        /* Error */
+        .error-card {
+            background: white;
+            border-radius: 10px;
+            border-top: 5px solid #e74c3c;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .error-card h2 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        /* Button */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #c0392b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #a93226;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>❤️ Cardiovascular Risk Predictor</h1>
+        <p>Final Year BCA Project — Educational Use Only</p>
+    </div>
+
+    <div class="container">
+
+        {% if error %}
+        <!-- Error Card -->
+        <div class="error-card">
+            <h2>⚠️ Error</h2>
+            <p>{{ error }}</p>
+        </div>
+
+        {% else %}
+        <!-- Result Card -->
+        <div class="card {% if prediction == 1 %}high-risk{% else %}low-risk{% endif %}">
+
+            <div class="risk-icon">
+                {% if prediction == 1 %}⚠️{% else %}✅{% endif %}
+            </div>
+
+            <div class="risk-label">{{ risk_label }}</div>
+
+            <div class="probability">
+                Probability of Cardiovascular Disease: <strong>{{ confidence }}</strong>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar {% if prediction == 1 %}high{% else %}low{% endif %}"
+                     style="width: {{ prob }}%">
+                </div>
+            </div>
+            <div class="progress-label">Risk Score: {{ prob }}%</div>
+
+        </div>
+
+        <!-- Patient Summary -->
+        <div class="summary-card">
+            <h2>📋 Patient Summary</h2>
+            <table>
+                <tr>
+                    <td>Sex</td>
+                    <td>{{ patient['Sex'] }}</td>
+                </tr>
+                <tr>
+                    <td>Age Category</td>
+                    <td>{{ patient['Age_Category'] }}</td>
+                </tr>
+                <tr>
+                    <td>Last Checkup</td>
+                    <td>{{ patient['Checkup'] }}</td>
+                </tr>
+                <tr>
+                    <td>Diabetes</td>
+                    <td>{{ patient['Diabetes'] }}</td>
+                </tr>
+                <tr>
+                    <td>Depression</td>
+                    <td>{{ patient['Depression'] }}</td>
+                </tr>
+                <tr>
+                    <td>Smoking History</td>
+                    <td>{{ patient['Smoking_History'] }}</td>
+                </tr>
+                <tr>
+                    <td>Exercise</td>
+                    <td>{{ patient['Exercise'] }}</td>
+                </tr>
+                <tr>
+                    <td>BMI</td>
+                    <td>{{ patient['BMI'] }}</td>
+                </tr>
+                <tr>
+                    <td>Alcohol (drinks/month)</td>
+                    <td>{{ patient['Alcohol_Consumption'] }}</td>
+                </tr>
+                <tr>
+                    <td>Fruit (servings/month)</td>
+                    <td>{{ patient['Fruit_Consumption'] }}</td>
+                </tr>
+                <tr>
+                    <td>Green Vegetables (servings/month)</td>
+                    <td>{{ patient['Green_Vegetables_Consumption'] }}</td>
+                </tr>
+                <tr>
+                    <td>Fried Potato (servings/month)</td>
+                    <td>{{ patient['FriedPotato_Consumption'] }}</td>
+                </tr>
+            </table>
+        </div>
+
+        {% endif %}
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            ⚠️ <strong>Disclaimer:</strong> This tool is for educational and academic
+            purposes only. It is NOT a substitute for professional medical advice.
+            Always consult a qualified cardiologist for cardiovascular health concerns.
+        </div>
+
+        <!-- Back Button -->
+        <a href="/" class="btn">🔙 Predict Again</a>
+
+    </div>
+
+</body>
+</html>
