@@ -1,18 +1,25 @@
 from flask import Flask, render_template, request
 import numpy as np
 import joblib
-import os
 
 app = Flask(__name__)
 
-# ---- Load Model Artifacts ----
-model         = joblib.load('models/cvd_xgboost_model.joblib')
-scaler        = joblib.load('models/cvd_scaler.joblib')
-encoders      = joblib.load('models/cvd_label_encoders.joblib')
-feature_names = joblib.load('models/cvd_feature_names.joblib')
+# ---- Load Model Artifacts from models/ folder ----
+model          = joblib.load('models/cvd_xgboost_model.joblib')
+scaler         = joblib.load('models/cvd_scaler.joblib')
+encoders       = joblib.load('models/cvd_label_encoders.joblib')
+feature_names  = joblib.load('models/cvd_feature_names.joblib')
 numerical_cols = joblib.load('models/cvd_numerical_cols.joblib')
 
-# ---- Home Route (Input Form) ----
+# ---- Default values for fields not in the form ----
+DEFAULTS = {
+    'General_Health' : 'Good',
+    'Skin_Cancer'    : 'No',
+    'Other_Cancer'   : 'No',
+    'Arthritis'      : 'No',
+}
+
+# ---- Home Route ----
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
@@ -21,16 +28,16 @@ def index():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get form data
+        # Get form data + fill missing fields with defaults
         patient = {
-            'General_Health'              : request.form.get('general_health'),
+            'General_Health'              : DEFAULTS['General_Health'],
             'Checkup'                     : request.form.get('checkup'),
             'Exercise'                    : request.form.get('exercise'),
-            'Skin_Cancer'                 : request.form.get('skin_cancer'),
-            'Other_Cancer'                : request.form.get('other_cancer'),
+            'Skin_Cancer'                 : DEFAULTS['Skin_Cancer'],
+            'Other_Cancer'                : DEFAULTS['Other_Cancer'],
             'Depression'                  : request.form.get('depression'),
             'Diabetes'                    : request.form.get('diabetes'),
-            'Arthritis'                   : request.form.get('arthritis'),
+            'Arthritis'                   : DEFAULTS['Arthritis'],
             'Sex'                         : request.form.get('sex'),
             'Age_Category'                : request.form.get('age_category'),
             'Height_(cm)'                 : float(request.form.get('height')),
@@ -83,3 +90,7 @@ def predict():
             'result.html',
             error = f"Something went wrong: {str(e)}"
         )
+
+# ---- Run App ----
+if __name__ == '__main__':
+    app.run(debug=True)

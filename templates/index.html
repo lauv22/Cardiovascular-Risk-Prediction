@@ -25,7 +25,7 @@
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 26px;
             margin-bottom: 5px;
         }
 
@@ -35,7 +35,7 @@
         }
 
         .container {
-            max-width: 850px;
+            max-width: 700px;
             margin: 30px auto;
             padding: 0 20px;
         }
@@ -49,7 +49,7 @@
         }
 
         .card h2 {
-            font-size: 16px;
+            font-size: 15px;
             color: #c0392b;
             margin-bottom: 18px;
             padding-bottom: 8px;
@@ -121,6 +121,7 @@
             font-size: 12px;
             color: #999;
             margin-top: 15px;
+            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -135,24 +136,10 @@
     <div class="container">
         <form action="/predict" method="POST">
 
-            <!-- Personal Information -->
+            <!-- Personal Info -->
             <div class="card">
                 <h2>👤 Personal Information</h2>
                 <div class="grid">
-
-                    <div class="form-group">
-                        <label>Age Category</label>
-                        <select name="age_category" required>
-                            <option value="">-- Select --</option>
-                            <option>18-24</option><option>25-29</option>
-                            <option>30-34</option><option>35-39</option>
-                            <option>40-44</option><option>45-49</option>
-                            <option>50-54</option><option>55-59</option>
-                            <option>60-64</option><option>65-69</option>
-                            <option>70-74</option><option>75-79</option>
-                            <option>80+</option>
-                        </select>
-                    </div>
 
                     <div class="form-group">
                         <label>Sex</label>
@@ -164,14 +151,22 @@
                     </div>
 
                     <div class="form-group">
-                        <label>General Health</label>
-                        <select name="general_health" required>
+                        <label>Age Category</label>
+                        <select name="age_category" required>
                             <option value="">-- Select --</option>
-                            <option>Excellent</option>
-                            <option>Very Good</option>
-                            <option>Good</option>
-                            <option>Fair</option>
-                            <option>Poor</option>
+                            <option>18-24</option>
+                            <option>25-29</option>
+                            <option>30-34</option>
+                            <option>35-39</option>
+                            <option>40-44</option>
+                            <option>45-49</option>
+                            <option>50-54</option>
+                            <option>55-59</option>
+                            <option>60-64</option>
+                            <option>65-69</option>
+                            <option>70-74</option>
+                            <option>75-79</option>
+                            <option>80+</option>
                         </select>
                     </div>
 
@@ -215,33 +210,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Arthritis</label>
-                        <select name="arthritis" required>
-                            <option value="">-- Select --</option>
-                            <option>Yes</option>
-                            <option>No</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Skin Cancer</label>
-                        <select name="skin_cancer" required>
-                            <option value="">-- Select --</option>
-                            <option>Yes</option>
-                            <option>No</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Other Cancer</label>
-                        <select name="other_cancer" required>
-                            <option value="">-- Select --</option>
-                            <option>Yes</option>
-                            <option>No</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
                         <label>Smoking History</label>
                         <select name="smoking" required>
                             <option value="">-- Select --</option>
@@ -262,9 +230,9 @@
                 </div>
             </div>
 
-            <!-- Body Measurements -->
+            <!-- Body & Lifestyle -->
             <div class="card">
-                <h2>📏 Body Measurements</h2>
+                <h2>📏 Body & Lifestyle</h2>
                 <div class="grid">
 
                     <div class="form-group">
@@ -290,14 +258,6 @@
                         </div>
                         <input type="hidden" name="bmi" id="bmi-value">
                     </div>
-
-                </div>
-            </div>
-
-            <!-- Diet & Lifestyle -->
-            <div class="card">
-                <h2>🥗 Diet & Lifestyle</h2>
-                <div class="grid">
 
                     <div class="form-group">
                         <label>Alcohol (drinks/month)</label>
@@ -336,19 +296,17 @@
             </button>
 
             <p class="disclaimer">
-                ⚠️ This tool is for educational purposes only.
+                ⚠️ For educational purposes only.
                 Not a substitute for professional medical advice.
             </p>
 
         </form>
     </div>
 
-    <!-- BMI Calculator Script -->
     <script>
         function calcBMI() {
             const height = parseFloat(document.getElementById('height').value);
             const weight = parseFloat(document.getElementById('weight').value);
-
             if (height > 0 && weight > 0) {
                 const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
                 document.getElementById('bmi-display').innerText = 'BMI = ' + bmi;
