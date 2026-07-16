@@ -83,13 +83,7 @@ def predict():
             confidence = confidence,
             prob       = round(prob * 100, 1),
             patient    = patient
-        )
 
-    except Exception as e:
-        return render_template(
-            'result.html',
-            error = f"Something went wrong: {str(e)}"
-        )
 
 # ---- Run App ----
 if __name__ == '__main__':
